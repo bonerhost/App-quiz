@@ -1,3 +1,4 @@
+   
 import random
 import tkinter as tk
 from tkinter import ttk, messagebox
@@ -15,8 +16,8 @@ questions = [
     },
     {
         "question": "How many days are there in a year?",
-        "options" : ["100", "200", "365", "366"],
-        "answer" : "365"
+        "options": ["100", "200", "365", "366"],
+        "answer": "365"
     },
     {
         "question": "What does CPU stand for?",
@@ -50,7 +51,7 @@ questions = [
     },
     {
         "question": "Which of these is not a programming language?",
-        "options": ["Python", "Java", "HTML", "MySQL"],
+        "options": ["Python", "JavaScript", "HTML", "MySQL"],
         "answer": "MySQL"
     },
     {
@@ -166,78 +167,65 @@ questions = [
     {
         "question": "What does AI stand for?",
         "options": ["Artificial Interface", "Automatic Intelligence", "Artificial Intelligence", "Automated Interface"],
-       "answer": "Artificial Intelligence"
-    },
-    {
-        "question": "What is the capital of France?",
-        "options": ["Paris", "London", "Berlin", "Madrid"],
-        "answer": "Paris"
-    },
-    {
-        "question": "What is the largest planet in our solar system?",
-        "options": ["Earth", "Jupiter", "Mars", "Venus"],
-        "answer": "Jupiter"
+        "answer": "Artificial Intelligence"
     },
     {
         "type": "trueFalse",
         "question": "The Earth is flat.",
         "options": ["True", "False"],
         "answer": "False"
-    },
-    {
-        "type": "trueFalse",
-        "question": "The Earth is flat.",
-        "options": ["True", "False"],
-        "answer": "False"
-    }   
-    # Add more questions here
+    }
 ]
 
 class QuizApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Quiz App")
+   def __init__(self, root):
+    self.root = root
+    self.root.title("Quiz Application")
+    
+    # Set the total time in minutes
+    self.total_time_minutes = 5  # Example: 5 minutes
+    self.total_time_seconds = self.total_time_minutes * 60
+    
+    self.time_remaining = self.total_time_seconds
+    self.score = 0
+    self.current_question_index = 0
 
-        self.time_limit = 60  # Set the time limit in seconds
-        self.time_remaining = self.time_limit
-        self.total_time = self.time_limit
-        self.score = 0
+    self.timer_label = tk.Label(root, text=f"Time Remaining: {self.time_remaining} seconds")
+    self.timer_label.pack()
 
-        random.shuffle(questions)  # Shuffle questions
-        self.questions = questions
-        self.current_question_index = 0
+    self.question_label = tk.Label(root, text="", wraplength=400)
+    self.question_label.pack()
 
-        self.create_widgets()
+    self.option_vars = []
+    self.option_buttons = []
+
+    for _ in range(4):
+        var = tk.StringVar()
+        button = tk.Radiobutton(root, variable=var, value="", text="", command=self.check_answer)
+        button.pack(anchor=tk.W)
+        self.option_vars.append(var)
+        self.option_buttons.append(button)
+
+    self.result_label = tk.Label(root, text="")
+    self.result_label.pack()
+
+    self.start_button = tk.Button(root, text="Start Quiz", command=self.start_quiz)
+    self.start_button.pack()
+
+    self.progress_var = tk.DoubleVar()
+    self.progress_bar = ttk.Progressbar(root, variable=self.progress_var, maximum=100)
+    self.progress_bar.pack(fill=tk.X, expand=1)
+
+    def start_quiz(self):
+        self.start_button.pack_forget()
         self.show_question()
         self.start_timer()
         self.start_progress_bar()
 
-    def create_widgets(self):
-        self.timer_label = tk.Label(self.root, text=f"Time Remaining: {self.time_remaining} seconds")
-        self.timer_label.pack()
-
-        self.progress_var = tk.DoubleVar()
-        self.progress_bar = ttk.Progressbar(self.root, maximum=100, variable=self.progress_var)
-        self.progress_bar.pack(fill=tk.X, padx=20, pady=10)
-
-        self.question_label = tk.Label(self.root, text="")
-        self.question_label.pack()
-
-        self.option_vars = [tk.StringVar() for _ in range(4)]
-        self.option_buttons = []
-
-        for var in self.option_vars:
-            button = tk.Radiobutton(self.root, variable=var, value="", text="", command=self.check_answer)
-            button.pack(fill=tk.X, padx=20, pady=5)
-            self.option_buttons.append(button)
-
-        self.result_label = tk.Label(self.root, text="")
-        self.result_label.pack()
-
     def show_question(self):
-        question = self.questions[self.current_question_index]
+        question = questions[self.current_question_index]
         self.question_label.config(text=question["question"])
-
+        
         for var, button, option in zip(self.option_vars, self.option_buttons, question["options"]):
             var.set(option)
             button.config(text=option, value=option, state=tk.NORMAL)
@@ -253,7 +241,7 @@ class QuizApp:
             self.end_quiz()
 
     def start_progress_bar(self):
-        progress_increment = 100 / self.total_time
+        progress_increment = 100 / self.total_time_seconds
         current_progress = self.progress_var.get()
         if current_progress < 100:
             self.progress_var.set(current_progress + progress_increment)
@@ -261,23 +249,26 @@ class QuizApp:
         else:
             self.end_quiz()
 
-    def check_answer(self):
-        question = self.questions[self.current_question_index]
-        selected_option = next((var.get() for var in self.option_vars if var.get()), None)  # Fixed line
-
+def check_answer(self):
+    question = questions[self.current_question_index]
+    selected_option = next((var.get() for var in self.option_vars if var.get()), None)
+    
+    if selected_option:
         if selected_option == question["answer"]:
             self.score += 1
             self.result_label.config(text="Correct!")
         else:
             self.result_label.config(text=f"Incorrect. The correct answer is {question['answer']}")
-
-        self.disable_buttons()
-        self.current_question_index += 1
-
-        if self.current_question_index < len(self.questions):
-            self.root.after(2000, self.show_question)
-        else:
-            self.root.after(2000, self.end_quiz)
+    else:
+        self.result_label.config(text="You did not select an answer.")
+    
+    self.disable_buttons()
+    self.current_question_index += 1
+    
+    if self.current_question_index < len(questions):
+        self.root.after(2000, self.show_question)
+    else:
+        self.root.after(2000, self.end_quiz)
 
     def disable_buttons(self):
         for button in self.option_buttons:
@@ -285,8 +276,8 @@ class QuizApp:
 
     def end_quiz(self):
         self.disable_buttons()
-        messagebox.showinfo("Quiz Completed", f"Your final score is {self.score} out of {len(self.questions)}.")
-        self.result_label.config(text=f"Your final score is {self.score} out of {len(self.questions)}.")
+        messagebox.showinfo("Quiz Completed", f"Your final score is {self.score} out of {len(questions)}.")
+        self.result_label.config(text=f"Your final score is {self.score} out of {len(questions)}.")
 
 if __name__ == "__main__":
     root = tk.Tk()
