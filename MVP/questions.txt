@@ -1,0 +1,36 @@
+What is the capital of France?  
+What is the largest planet in our solar system?
+How many days are there in a year?
+What does CPU stand for?
+Which language is primarily used for web development?
+ What does RAM stand for?
+ What is the main function of an operating system?
+What is the name of the first computer virus?",
+What does HTTP stand for?
+Which of these is not a programming language?
+What does DNS stand for?
+What is the purpose of a firewall in computer networks?
+What is the main use of SQL?
+Which company developed the Windows operating system?
+What does IP stand for in networking?
+Which programming language is known for its use in artificial intelligence and machine learning?
+What does URL stand for?
+What is the main purpose of an IDE in programming?
+Which company is known for the Android operating system?
+What does SSD stand for in computer storage?
+Which of these is a NoSQL database?
+What does GUI stand for?
+What is the main purpose of an API?
+Which technology is used for creating virtual machines?
+What does VPN stand for?
+Which language is primarily used for data analysis and statistical computing?
+What is the purpose of version control systems like Git?
+Which of these is a popular JavaScript framework for building web applications?",
+What does IoT stand for?
+Which protocol is commonly used to secure web transactions?
+What does AI stand for?
+What is the capital of France?
+What is the largest planet in our solar system?
+True/False
+The Earth is flat.
+        
